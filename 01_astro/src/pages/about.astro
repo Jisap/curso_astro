@@ -1,10 +1,18 @@
 ---
-import Navbar from "../components/Navbar.astro";
+import CustomTitle from "../components/CustomTitle.astro";
 import MainLayout from "../layouts/MainLayout.astro";
 ---
 
 
 
 <MainLayout title="About">
-	<h1>Hola desde el about</h1>
+	<h1>About</h1>
+
+	<CustomTitle  title="Título personalizado"/>
+
+	<style>
+		h1 {
+			color: red;
+		}
+	</style>
 </MainLayout>

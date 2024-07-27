@@ -9,15 +9,9 @@ const name = "jisap";
   <h1>Astro!!! {name}</h1>
   <p>Momento actual: {new Date().toLocaleDateString()}</p>
   <p id="actual">Momento actual real:</p>
-
-  <footer>Año 2023</footer>
 </MainLayout>
 
 <script>
-  const currentYear: number = new Date().getFullYear();
-  const footer = document.querySelector("footer") as HTMLElement;
-  footer.innerText = `Año : ${currentYear}`;
-
   const actual = document.querySelector("#actual") as HTMLParagraphElement;
   actual.innerText = `Momento actual real: ${new Date().toLocaleTimeString()}`;
 </script>
