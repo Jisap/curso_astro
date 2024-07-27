@@ -11,17 +11,27 @@ const name = "jisap";
     <title>Astro</title>
   </head>
   <body>
+
+    <nav>
+      <a href="/">Home Page</a>
+      <a href="/about">About Page</a>
+      <a href="contact">Contact Page</a>
+    </nav>
+
+
     <h1>Astro!!! {name}</h1>
     <p>Momento actual: {new Date().toLocaleDateString()}</p>
+    <p id="actual">Momento actual real: </p>
 
-    <footer>
-
-		</footer>
+    <footer>Año 2023</footer>
 
     <script>
       const currentYear: number = new Date().getFullYear();
-			const footer = document.querySelector('footer') as HTMLElement;
-			footer.innerText = `Año: ${ currentYear }`
-		</script>
+      const footer = document.querySelector("footer") as HTMLElement;
+      footer.innerText = `Año : ${currentYear}`;
+
+      const actual = document.querySelector("#actual") as HTMLParagraphElement;
+      actual.innerText = `Momento actual real: ${new Date().toLocaleTimeString()}`
+    </script>
   </body>
 </html>
