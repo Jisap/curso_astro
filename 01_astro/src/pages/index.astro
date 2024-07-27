@@ -1,35 +1,23 @@
 ---
 import Navbar from "../components/Navbar.astro";
+import MainLayout from "../layouts/MainLayout.astro";
 
 const name = "jisap";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
-  </head>
-  <body>
+<MainLayout title="Home">
+  <h1>Astro!!! {name}</h1>
+  <p>Momento actual: {new Date().toLocaleDateString()}</p>
+  <p id="actual">Momento actual real:</p>
 
-    <Navbar />
+  <footer>Año 2023</footer>
+</MainLayout>
 
+<script>
+  const currentYear: number = new Date().getFullYear();
+  const footer = document.querySelector("footer") as HTMLElement;
+  footer.innerText = `Año : ${currentYear}`;
 
-    <h1>Astro!!! {name}</h1>
-    <p>Momento actual: {new Date().toLocaleDateString()}</p>
-    <p id="actual">Momento actual real: </p>
-
-    <footer>Año 2023</footer>
-
-    <script>
-      const currentYear: number = new Date().getFullYear();
-      const footer = document.querySelector("footer") as HTMLElement;
-      footer.innerText = `Año : ${currentYear}`;
-
-      const actual = document.querySelector("#actual") as HTMLParagraphElement;
-      actual.innerText = `Momento actual real: ${new Date().toLocaleTimeString()}`
-    </script>
-  </body>
-</html>
+  const actual = document.querySelector("#actual") as HTMLParagraphElement;
+  actual.innerText = `Momento actual real: ${new Date().toLocaleTimeString()}`;
+</script>
