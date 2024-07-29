@@ -29,7 +29,7 @@ const audioSrc = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pok
       <a href="/" class="hover:underline text-blue-500">Regresar</a>
       <h1 class="text-5xl capitalize">{name}</h1>
     </div>
-    <PokemonCard name={name} url={url} />
+    <PokemonCard name={name} url={url} isBig={true}/>
     <audio controls class="mt-5">
       <source src={audioSrc} type="audio/ogg" />
       Your browser does not support the adui element
