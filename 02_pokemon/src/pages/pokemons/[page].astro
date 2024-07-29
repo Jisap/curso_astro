@@ -17,6 +17,7 @@ export const getStaticPaths = (async({paginate}) => {
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props
+
 ---
 
 <MainLayout title={title}>
@@ -27,12 +28,14 @@ const { page } = Astro.props
     arial-label="Listado de Pokemons"
     class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 gap-4 mt-4"
   >
-    {page.data.map(({name, url}) => (
-			<PokemonCard  
-				name={name}
-				url={url}
-			/>
-		))}
+    {page.data.map(({name, url}) => {
+      return(
+        <PokemonCard  
+          name={name}
+          url={url}
+        />
+      )
+		})}
   </section>
 
   <section class="flex mt-10 items-center justify-between">

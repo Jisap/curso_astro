@@ -5,3 +5,7 @@
 .disabled {
   @apply bg-gray-600 text-gray-400;
 }
+
+/* a{
+  @apply hover:underline text-blue-500;
+} */
