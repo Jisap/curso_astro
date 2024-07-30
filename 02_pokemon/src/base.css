@@ -6,6 +6,6 @@
   @apply bg-gray-600 text-gray-400;
 }
 
-/* a{
+a{
   @apply hover:underline text-blue-500;
-} */
+}

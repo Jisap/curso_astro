@@ -9,8 +9,8 @@ export const getStaticPaths = (async () => {
   const resp = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
   const { results } = (await resp.json()) as PokemonListResponse;
 
-  return results.map(({name, url}) => {
-    console.log({url});
+  return results.map(({ name, url }) => {
+    console.log({ url });
     return {
       params: { name },
       props: { name, url },
@@ -22,9 +22,14 @@ const { name } = Astro.params;
 const { url } = Astro.props;
 const id = url.split("/").at(-2);
 const audioSrc = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`;
+const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
 ---
 
-<MainLayout title={`Pokémon - #${id} ${name}`}>
+<MainLayout
+  title={`Pokémon - #${id} ${name}`}
+  description={`Información sobre el pokemon ${name}`}
+  image={imageSrc}
+>
   <section class="flex flex-col justify-center items-center h-screen">
     <div class="mb-10">
       <a href="/" class="hover:underline text-blue-500">Regresar</a>
