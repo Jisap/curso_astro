@@ -16,7 +16,7 @@ const data = (await resp.json()) as PokemonListResponse;
 
   <section
     arial-label="Listado de Pokemons"
-    class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 gap-4 mt-4"
+    class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 gap-3 mt-5"
   >
     {data.results.map(({name, url}) => (
 			<PokemonCard  
