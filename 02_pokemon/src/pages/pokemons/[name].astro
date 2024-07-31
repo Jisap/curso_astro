@@ -4,6 +4,7 @@ import MainLayout from "../../layouts/MainLayout.astro";
 import PokemonCard from "../../components/PokemonCard.astro";
 import type { PokemonListResponse } from "../../interfaces/pokemon-list.response";
 import "../../base.css";
+import Title from "@components/shared/Title.astro";
 
 export const getStaticPaths = (async () => {
   const resp = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
@@ -31,9 +32,9 @@ const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
   image={imageSrc}
 >
   <section class="flex flex-col justify-center items-center min-h-screen">
-    <div class="mb-10">
+    <div class="">
       <a href="/" class="hover:underline text-blue-500">Regresar</a>
-      <h1 class="text-5xl capitalize">{name}</h1>
+      <Title>{name}</Title>    
     </div>
     <PokemonCard name={name} url={url} isBig={true} />
     <audio controls class="mt-5">
