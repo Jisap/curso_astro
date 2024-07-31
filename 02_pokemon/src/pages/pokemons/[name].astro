@@ -5,6 +5,7 @@ import PokemonCard from "../../components/PokemonCard.astro";
 import type { PokemonListResponse } from "../../interfaces/pokemon-list.response";
 import "../../base.css";
 import Title from "@components/shared/Title.astro";
+import { Icon } from "astro-icon/components";
 
 export const getStaticPaths = (async () => {
   const resp = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
@@ -32,16 +33,21 @@ const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
   image={imageSrc}
 >
   <section class="flex flex-col justify-center items-center min-h-screen">
-    <div class="flex flex-col items-start">
-      <!-- <a href="/" class="hover:underline text-blue-500">Regresar</a> -->
-      <button 
-        class="text-blue-500" 
-        onclick="history.back()"
-      >
-        Regresar
+    <div class="flex flex-row gap-2">
+      <div class="flex flex-col items-start">
+        <!-- <a href="/" class="hover:underline text-blue-500">Regresar</a> -->
+        <button class="text-blue-500" onclick="history.back()">
+          Regresar
+        </button>
+        <Title>{name}</Title>
+      </div>
+
+      <button class="ml-4 text-red-600" id="btn-favorite">
+        <Icon name="heart-outline" size={50} />
+        <Icon name="heart-full" size={50} class="hidden" />
       </button>
-      <Title>{name}</Title>
     </div>
+
     <PokemonCard name={name} url={url} isBig={true} />
     <audio controls class="mt-5">
       <source src={audioSrc} type="audio/ogg" />

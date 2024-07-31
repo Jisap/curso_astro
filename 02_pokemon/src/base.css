@@ -9,3 +9,7 @@
 a{
   @apply hover:underline text-blue-500;
 }
+
+#btn-favorite {
+  @apply hover:animate-pulse;
+}
