@@ -4,6 +4,7 @@ import type { PokemonListResponse } from "../../interfaces/pokemon-list.response
 import MainLayout from "../../layouts/MainLayout.astro";
 import PokemonCard from "../../components/PokemonCard.astro";
 import "../../base.css"
+import Title from "@components/shared/Title.astro";
 
 const title = "Pokemon Static | Home";
 
@@ -21,12 +22,11 @@ const { page } = Astro.props
 ---
 
 <MainLayout title={title}>
-  <h1 class="text-3xl my-3 mt-10">Listado de Pokemons</h1>
-  <hr />
+  <Title>Listado Paginado</Title>
 
   <section
     arial-label="Listado de Pokemons"
-    class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 gap-4 mt-4"
+    class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 gap-3 mt-5"
   >
     {page.data.map(({name, url}) => {
       return(
