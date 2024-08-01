@@ -42,7 +42,12 @@ const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
         <Title>{name}</Title>
       </div>
 
-      <button class="ml-4 text-red-600" id="btn-favorite">
+      <button 
+        class="ml-4 text-red-600" 
+        id="btn-favorite"
+        data-name={name}  
+        data-id={id}
+      >
         <Icon name="heart-outline" size={50} />
         <Icon name="heart-full" size={50} class="hidden" />
       </button>
@@ -54,4 +59,28 @@ const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
       Your browser does not support the audio element
     </audio>
   </section>
+
+  <script>
+    interface favoritePokemon {
+      name: string;
+      id: number;
+    }
+
+    document.addEventListener('astro:page-load', () => {
+
+      const btnFavorite = document.querySelector('#btn-favorite') as HTMLButtonElement;
+      
+      if(!btnFavorite) return;
+      
+      const name = btnFavorite.dataset.name;
+      const id = btnFavorite.dataset.id;
+  
+      btnFavorite.addEventListener('click', () => {
+        console.log({name, id});
+      });
+
+    })
+
+  </script>
+
 </MainLayout>
