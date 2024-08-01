@@ -59,58 +59,60 @@ const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
       Your browser does not support the audio element
     </audio>
   </section>
+</MainLayout>
+<script>
+  interface favoritePokemon {
+    name: string;
+    id: number;
+  }
 
-  <script>
-    interface favoritePokemon {
-      name: string;
-      id: number;
+  const handlePageLoad = () => {
+    let favoritePokemons: favoritePokemon[] = JSON.parse(                                 // Definición de localStorage
+      localStorage.getItem("favorites") ?? "[]"                                           // Se busca la entrada "favorites" y si no existe []
+    );
+
+    const btnFavorite = document.querySelector(                                           // Identificación del boton del corazón
+      "#btn-favorite"
+    ) as HTMLButtonElement;
+
+    if (!btnFavorite) return;
+
+    const name = btnFavorite.dataset.name ?? "";                                          // Desde el boton obtenemos el name
+    const id = btnFavorite.dataset.id ?? "";                                              // el id
+    const isFavorite = favoritePokemons.some((fav) => fav.name === name);                 // y si el name del pokemon está en el [favorites]
+
+    const heartOutline = btnFavorite.querySelector(                                       // Identificamos el corazón vacio
+      "[data-outline]"
+    ) as HTMLElement;
+    const heartFull = btnFavorite.querySelector("[data-full]") as HTMLElement;            // Identificamos el corazón relleno  
+
+    if (isFavorite) {                                                                     // Si el pokemon esta en favoritos al dar click en el corazón
+      heartOutline.classList.add("hidden");                                               // ocultamos el corazón vacio
+      heartFull.classList.remove("hidden");                                               // y mostramos el corazón relleno quitando la clase hidden
     }
 
-    const handlePageLoad = () => {
-      let favoritePokemons: favoritePokemon[] = JSON.parse(
-        localStorage.getItem("favorites") ?? "[]"
-      );
+    const toggleFavorite = () => {
+      const isFavorite = favoritePokemons.some((fav) => fav.name === name);               // Obtenemos si el pokemon es o no favorito
 
-      const btnFavorite = document.querySelector(
-        "#btn-favorite"
-      ) as HTMLButtonElement;
+      if (isFavorite) {                                                                   // Si lo es
+        favoritePokemons = favoritePokemons.filter((fav) => fav.name !== name);           // se borra de favoritePokemons
+      } else {
+        favoritePokemons.push({                                                           // Si no lo es se agrega
+          id: +id,                                    
+          name: name,
+        });
+      }
 
-      if (!btnFavorite) return;
-
-      const name = btnFavorite.dataset.name ?? "";
-      const id = btnFavorite.dataset.id ?? "";
-
-      const heartOutline = btnFavorite.querySelector(
-        "[data-outline]"
-      ) as HTMLElement;
-      const heartFull = btnFavorite.querySelector("[data-full]") as HTMLElement;
-
-      const toggleFavorite = () => {
-        const isFavorite = favoritePokemons.some((fav) => fav.name === name);
-
-        if (isFavorite) {
-          favoritePokemons = favoritePokemons.filter(
-            (fav) => fav.name !== name
-          ); // borrar
-        } else {
-          favoritePokemons.push({
-            // agregar
-            id: +id,
-            name: name,
-          });
-        }
-
-        localStorage.setItem("favorites", JSON.stringify(favoritePokemons));
-      };
-
-      btnFavorite.addEventListener("click", () => {
-        heartOutline.classList.toggle("hidden");
-        heartFull.classList.toggle("hidden");
-      });
-
-      toggleFavorite()
+      localStorage.setItem("favorites", JSON.stringify(favoritePokemons));                // Se establece en localStorage favoritePokemons
     };
 
-    document.addEventListener("astro:page-load", () => handlePageLoad());
-  </script>
-</MainLayout>
+    btnFavorite.addEventListener("click", () => {                                         // Cada vez que se pulse el boton del corazón
+      heartOutline.classList.toggle("hidden");                                            // se cambiará al contrario la clase hidden en el corazón vacio
+      heartFull.classList.toggle("hidden");                                               // y lo mismo en el boton del corazón relleno
+      toggleFavorite();                                                                   // Se actualiza el localstorage
+    });
+
+  };
+
+  document.addEventListener("astro:page-load", () => handlePageLoad());                   // cada vez que se cargue la página se llama handlePageLoad -> listener btnFavorite -> toggleFavorite
+</script>

@@ -26,7 +26,7 @@ const { page } = Astro.props
 
   <section
     arial-label="Listado de Pokemons"
-    class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 gap-3 mt-5"
+    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 xl:grid-cols-5 gap-3 mt-5"
   >
     {page.data.map(({name, url}) => {
       return(
