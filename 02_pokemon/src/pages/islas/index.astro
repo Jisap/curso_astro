@@ -2,10 +2,31 @@
 import Title from "@components/shared/Title.astro";
 import MainLayout from "@layouts/MainLayout.astro";
 import { Counter } from "../../components/Counter";
+
+const counterValue = 20;
 ---
 
 <MainLayout title="Favoritos">
   <Title>Islas</Title>
 
-  <Counter client:only="solid-js" />
+  <Counter
+    transition:persist="counter"
+    transition:persist-props
+    client:visible
+    initValue={counterValue}
+  >
+    <Title>Counter Island</Title>
+  </Counter>
+
+  <video 
+    controls="" 
+    autoplay={false}
+    transition:persist="playing-video"
+    class="mt-5"  
+  >
+    <source
+      src="https://ia804502.us.archive.org/33/items/GoldenGa1939_3/GoldenGa1939_3_512kb.mp4"
+      type="video/mp4"
+    />
+  </video>
 </MainLayout>
