@@ -12,7 +12,7 @@ export const Counter = () => {
 
       
       <button 
-        class="btn" 
+        class="btn mr-2" 
         onClick={() => setCounter(prev => --prev)}
       >
         -1
