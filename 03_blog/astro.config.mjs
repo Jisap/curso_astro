@@ -7,5 +7,12 @@ import mdx from "@astrojs/mdx";
 export default defineConfig({
   integrations: [tailwind({
     applyBaseStyles: true
-  }), mdx()]
+  }), mdx()],
+  // content: {
+  //   collections: {
+  //     posts: {
+  //       path: './src/pages/posts',  // Define la ruta a la carpeta de posts
+  //     },
+  //   }
+  // }
 });

@@ -10,13 +10,13 @@ const { title, ...rest } = Astro.props;
 const frontmatter = rest.frontmatter
 ---
 
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>{frontmatter.title}</title>
+    <title>{title}</title>
     <ViewTransitions />
   </head>
 
