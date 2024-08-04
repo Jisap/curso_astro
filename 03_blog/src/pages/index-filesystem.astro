@@ -1,11 +1,12 @@
 ---
 import MainLayout from "../layouts/BlogLayout.astro";
+import BlogCard from "../components/BlogCard.astro";
 import { siteConfig } from "../config/site-config";
-import { getCollection } from "astro:content";
-import TypedBlogPost from "../components/TypedBlogPost.astro";
 
 
-const blogPosts = await getCollection("blog");
+
+const posts = await Astro.glob('./posts-old/*.{mdx,md}')
+console.log(posts);
 
 ---
 
@@ -19,9 +20,13 @@ const blogPosts = await getCollection("blog");
       </h1>
 
       <div class="grid grid-cols-1 gap-8 mt-8 md:mt-16 md:grid-cols-2">
-        
-        {blogPosts.map((post) => <TypedBlogPost post={post} />)}
-        
+        {
+          posts.map((post) => (
+              <BlogCard
+                {...post}
+              /> 
+          ))
+        }
       </div>
     </div>
   </section>
