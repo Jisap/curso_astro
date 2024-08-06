@@ -1,4 +1,4 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection, reference, z } from 'astro:content';
 
 const blogCollection = defineCollection({ // Collection nos da el tipado y situa la collection en content/blog
   type: 'content',
@@ -12,13 +12,25 @@ const blogCollection = defineCollection({ // Collection nos da el tipado y situa
       }),
 
       // Relación
-      author: z.string(),
+      //author: z.string(),
+      author: reference('author'),
 
       // Relación
       tags: z.array(z.string()),
     }),
 });
 
+const authorCollection = defineCollection({
+  type: 'data',
+  schema: ({image}) => 
+    z.object({
+      name: z.string(),
+      avatar: image(),
+    })
+})
+
+
 export const collections = {
-  blog: blogCollection, // blog apunta al nombre del directorio que contiene los mdx (dentro de /content)
+  blog: blogCollection,           // blog apunta al nombre del directorio que contiene los mdx (dentro de /content)
+  author: authorCollection,
 };
