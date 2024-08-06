@@ -16,12 +16,14 @@ const { title } = Astro.props;
   </head>
 
   <body class="bg-gray-900 h-full overflow-x-hidden">
-    <a 
-      href="/" 
-      id="btn-back"
-    >
-        Regresar
-    </a>
+    <button onclick="history.back()">
+      <a 
+        href="#" 
+        id="btn-back"
+      >
+          Regresar
+      </a>
+    </button>
     <main class="mb-10 max-w-5xl m-auto p-2">
       <slot />
     </main>
