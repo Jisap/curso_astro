@@ -1,8 +1,9 @@
 ---
-import MainLayout from "../layouts/BlogLayout.astro";
+
 import { siteConfig } from "../config/site-config";
 import { getCollection } from "astro:content";
 import TypedBlogPost from "../components/TypedBlogPost.astro";
+import MainLayout from "src/layouts/MainLayout.astro";
 
 
 const blogPosts = await getCollection("blog");
@@ -17,6 +18,8 @@ const blogPosts = await getCollection("blog");
       >
         {siteConfig.title}
       </h1>
+
+      <a href="/blog/1" class="text-blue-500 hover:underline">Blog paginado</a>
 
       <div class="grid grid-cols-1 gap-8 mt-8 md:mt-16 md:grid-cols-2">
         
