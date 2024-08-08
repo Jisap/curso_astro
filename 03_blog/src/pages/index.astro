@@ -19,7 +19,11 @@ const blogPosts = await getCollection("blog", (post) => post.data.isDraft === fa
         {siteConfig.title}
       </h1>
 
-      <a href="/blog/1" class="text-blue-500 hover:underline">Blog paginado</a>
+      <div class="flex gap-2">
+        <a href="/blog/1" class="text-blue-500 hover:underline">Blog paginado</a>
+        <span class="text-white"> | </span>
+        <a href="/authors" class="text-blue-500 hover:underline">Autores</a>
+      </div>
 
       <div class="grid grid-cols-1 gap-8 mt-8 md:mt-16 md:grid-cols-2">
         
