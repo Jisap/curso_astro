@@ -6,7 +6,7 @@ import TypedBlogPost from "../components/TypedBlogPost.astro";
 import MainLayout from "src/layouts/MainLayout.astro";
 
 
-const blogPosts = await getCollection("blog");
+const blogPosts = await getCollection("blog", (post) => post.data.isDraft === false); // Solo se mostrarán las entradas que tengan isDraft = false
 
 ---
 

@@ -17,6 +17,9 @@ const blogCollection = defineCollection({ // Collection nos da el tipado y situa
 
       // Relación
       tags: z.array(z.string()),
+
+      // Boolean
+      isDraft: z.boolean().default(false),
     }),
 });
 
