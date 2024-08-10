@@ -10,5 +10,6 @@ export default defineConfig({
   }), mdx()],
   image: {
     service: squooshImageService(),
-  }
+  },
+  site: 'https://example.com'
 });
