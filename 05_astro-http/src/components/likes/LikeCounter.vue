@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import confetti from 'canvas-confetti'
 
 
@@ -32,9 +32,19 @@ import confetti from 'canvas-confetti'
   const likeClicks = ref(0);    // Cantidad de likes al darle click
   const isLoading = ref(true);
 
-  const likePost = () => {
-   likeCount.value++
-   likeClicks.value++
+  watch(likeCount, () => {                                // 3º Cuando se incrementa el valor de los likes recibidos desde la bd
+    fetch(`/api/posts/likes/${props.postId}`, {            // obtenemos el post que se desea modificar
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ likes: likeClicks.value})    // y se le actualiza los likes con la cantidad de likes que se han producido en el componente
+    })
+  })
+
+  const likePost = () => {            // 2º Cuando se hace click en el boton de like se activa esta función
+   likeCount.value++                  // que incrementa el valor de los likes recibidos desde la bd
+   likeClicks.value++                 // y el de los clicks realizados
    confetti({
       particleCount: 100,
       spread: 70,
@@ -45,13 +55,13 @@ import confetti from 'canvas-confetti'
    })
   }
 
-  const getCurrentLikes = async() => {
-    const resp = await fetch(`/api/posts/likes/${props.postId}`);
+  const getCurrentLikes = async() => {                            // 1º Cuando se cargue el componente 
+    const resp = await fetch(`/api/posts/likes/${props.postId}`); // obtenemos el post relativo al postId (petición GET)
     if(!resp.ok) return
 
-    const data = await resp.json()
+    const data = await resp.json();                               
     
-    likeCount.value = data.likes;
+    likeCount.value = data.likes;                                  // y asigna el valor de la ref likeCount con el de la bd
     isLoading.value = false;
   }
 
