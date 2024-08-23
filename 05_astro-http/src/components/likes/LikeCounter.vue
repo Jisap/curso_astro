@@ -13,10 +13,13 @@
     <span>{{ likeCount }}</span>
   </button>
 
+  {{ likeClicks }}
+
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+import confetti from 'canvas-confetti'
 
 
   interface Props {
@@ -30,7 +33,16 @@ import { ref } from 'vue';
   const isLoading = ref(true);
 
   const likePost = () => {
-    console.log("+1 like");
+   likeCount.value++
+   likeClicks.value++
+   confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: {
+        x: Math.random(),
+        y: Math.random() - 0.2
+      }
+   })
   }
 
   const getCurrentLikes = async() => {
