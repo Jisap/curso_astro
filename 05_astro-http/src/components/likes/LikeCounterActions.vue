@@ -28,27 +28,25 @@ import { actions } from 'astro:actions';
     postId: string;
   }
 
-  const props = defineProps<Props>() // Se definen las props en vue (props.postId) que se reciben
+  const props = defineProps<Props>()      // Se definen las props en vue (props.postId) que se reciben
  
-  const likeCount = ref(0);          // Valor en bd
-  const likeClicks = ref(0);         // Cantidad de likes al darle click
+  const likeCount = ref(0);               // Valor en bd
+  const likeClicks = ref(0);              // Cantidad de likes al darle click
   const isLoading = ref(true);
 
-  watch(likeCount, debounce(() => {                                 // 3º Cuando se incrementa el valor de los likes recibidos desde la bd
-    fetch(`/api/posts/likes/${props.postId}`, {                     // obtenemos el post que se desea modificar
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ likes: likeClicks.value})              // y se le actualiza los likes con la cantidad de likes que se han producido en el componente
-    });
+  watch(likeCount, debounce(() => {       // 3º Cuando se incrementa el valor de los likes recibidos desde la bd
+    actions.updatePostsLikes({            // usamos la action updatePostLikes para actualizar en bd los likes pulsado en el postId
+      postId: props.postId,
+      likes: likeClicks.value,
+    })
 
     likeClicks.value = 0;
+   
   },500 ))
 
-  const likePost = () => {            // 2º Cuando se hace click en el boton de like se activa esta función
-   likeCount.value++                  // que incrementa el valor de los likes recibidos desde la bd
-   likeClicks.value++                 // y el de los clicks realizados
+  const likePost = () => {                // 2º Cuando se hace click en el boton de like se activa esta función
+   likeCount.value++                      // que incrementa el valor de los likes recibidos desde la bd
+   likeClicks.value++                     // y el de los clicks realizados
    confetti({
       particleCount: 100,
       spread: 70,
