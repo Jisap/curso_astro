@@ -20,7 +20,7 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
 import confetti from 'canvas-confetti'
-
+import debounce from 'lodash.debounce'
 
   interface Props {
     postId: string;
@@ -32,7 +32,7 @@ import confetti from 'canvas-confetti'
   const likeClicks = ref(0);         // Cantidad de likes al darle click
   const isLoading = ref(true);
 
-  watch(likeCount, () => {                                 // 3º Cuando se incrementa el valor de los likes recibidos desde la bd
+  watch(likeCount, debounce(() => {                                 // 3º Cuando se incrementa el valor de los likes recibidos desde la bd
     fetch(`/api/posts/likes/${props.postId}`, {            // obtenemos el post que se desea modificar
       method: 'PUT',
       headers: {
@@ -42,7 +42,7 @@ import confetti from 'canvas-confetti'
     });
 
     likeClicks.value = 0;
-  })
+  },500 ))
 
   const likePost = () => {            // 2º Cuando se hace click en el boton de like se activa esta función
    likeCount.value++                  // que incrementa el valor de los likes recibidos desde la bd
