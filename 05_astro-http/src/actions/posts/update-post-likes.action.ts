@@ -26,8 +26,6 @@ export const updatePostsLikes = defineAction({
 
     await db.update(Posts).set(post).where(eq(Posts.id, postId));
 
-    // throw new Error('No se pudo cargar el post');
-
     return true;
   },
 });
