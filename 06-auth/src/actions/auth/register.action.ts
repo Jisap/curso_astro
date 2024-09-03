@@ -32,7 +32,8 @@ export const registerUser = defineAction({
 
 
 
-      return user
+      return JSON.stringify(user);
+
     } catch (error) {
       console.log(error);
 

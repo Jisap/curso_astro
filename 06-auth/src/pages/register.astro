@@ -23,9 +23,7 @@ const rememberMe = !!email
           />
         </div>
         <div class="space-y-2">
-          <label class="text-sm font-medium text-gray-700 tracking-wide"
-            >Email</label
-          >
+          <label class="text-sm font-medium text-gray-700 tracking-wide">Email</label>
           <input
             class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-400"
             type="email"
@@ -92,6 +90,7 @@ const rememberMe = !!email
 
 <script>
   import { actions } from "astro:actions";
+  import Swal from 'sweetalert2'
 
   const form = document.querySelector("form") as HTMLFormElement;
   const btnSubmit = document.querySelector("#btn-submit") as HTMLButtonElement;
@@ -105,10 +104,16 @@ const rememberMe = !!email
     const { data ,error } = await actions.registerUser(formData);
 
     if(error) {
-      console.log(error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Credenciales no son correctas",
+        text: error.message,
+      })
+      btnSubmit.removeAttribute("disabled");
+      return
     }
 
+    window.location.replace('/protected')
 
-    btnSubmit.removeAttribute("disabled");
   });
 </script>
