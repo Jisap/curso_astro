@@ -4,7 +4,7 @@
 import { firebase } from '@/firebase/config';
 import { defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
-import { createUserWithEmailAndPassword, type AuthError } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile, type AuthError } from 'firebase/auth';
 
 export const registerUser = defineAction({
   accept: 'form',
@@ -28,11 +28,17 @@ export const registerUser = defineAction({
     }
   
     try {
-      const user = await createUserWithEmailAndPassword(firebase.auth, email, password);
+      const user = await createUserWithEmailAndPassword(firebase.auth, email, password);  // Creación del usuario
 
+      updateProfile(firebase.auth.currentUser!, {                                         // Actualización de datos del usuario
+        displayName: name
+      });
 
+      await sendEmailVerification(firebase.auth.currentUser!, {                           // Verificación de email
+        url: 'http://localhost:4321/protected?emailVerified=true',
+      });
 
-      return JSON.stringify(user);
+      return JSON.stringify(user);                                                        // Devuelve el usuario creado
 
     } catch (error) {
       console.log(error);
