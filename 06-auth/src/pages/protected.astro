@@ -1,12 +1,20 @@
 ---
-//import { firebase } from "@/firebase/config";
+import { firebase } from "@/firebase/config";
 import MainLayout from "@/layouts/MainLayout.astro";
 
-// const firebaseUser = firebase.auth.currentUser;
+const { user, isLoggedIn } = Astro.locals;          // Estado de usuario según el middleware
 
-// if (firebaseUser === null) {
-//   return Astro.redirect("/login");
-// }
+const firebaseUser = firebase.auth.currentUser;     // Obtener el usuario logueado de firebase
+
+if(!isLoggedIn || !user){                           // Si el usuario no esta logueado o no tiene datos
+  return Astro.redirect('/login')                   // Redirigir a la página de login             
+}
+
+const { name, email, avatar } = user;               // Desestructurar los datos del usuario
+
+if (firebaseUser === null) {                        // Si el usuario no esta logueado en firebase               
+  return Astro.redirect("/login");                  // Redirigir a la página de login           
+}
 
 // const {
 //   displayName,
@@ -15,17 +23,13 @@ import MainLayout from "@/layouts/MainLayout.astro";
 //   photoURL,
 // } = firebaseUser;
 
-// await firebaseUser.reload();
+await firebaseUser.reload();                        // Actualizar los datos del usuario
+const { emailVerified } = firebaseUser;             // Obtener el estado de email verificado
 
 // const name = displayName ?? "No display name"
 
-const { user, isLoggedIn } = Astro.locals;
 
-if(!isLoggedIn || !user){
-  return Astro.redirect('/login')
-}
 
-const { name, email, emailVerified, avatar } = user;
 ---
 
 <MainLayout>

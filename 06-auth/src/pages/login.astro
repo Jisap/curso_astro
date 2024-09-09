@@ -141,7 +141,7 @@ const rememberMe = !!email;
 
       btnGoogle.innerText = "Redireccionando...";
 
-      window.location.replace("/protected");
+      window.location.replace("/protected");                              // Si no hay errores se redirige a la ruta de la página protegida
     } catch (error) {
       console.log(error);
       btnGoogle.removeAttribute("disabled");
