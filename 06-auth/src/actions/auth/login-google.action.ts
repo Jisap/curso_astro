@@ -14,13 +14,13 @@ export const loginWithGoogle = defineAction({
   input: z.any(),
   handler: async (credentials) => {
 
-    const credential = GoogleAuthProvider.credentialFromResult(credentials);
+    const credential = GoogleAuthProvider.credentialFromResult(credentials);   // 1º Obtener las credenciales del objeto resultante de la autenticación de Google
     
     if(!credential){
       throw new Error('Google Sign In failed')
     }
 
-    await signInWithCredential(firebase.auth, credential);
+    await signInWithCredential(firebase.auth, credential);                    // Autenticar al usuario en Firebase con las credenciales obtenidas 
     
     return { ok: true}
   }

@@ -1,9 +1,10 @@
 import { defineMiddleware } from "astro:middleware";
 import { firebase } from "./firebase/config";
 
+const privateRoutes = ['/protected']
+const notAuthenticatedRoutes = ['/login', '/register']
 
-
-export const onRequest = defineMiddleware(({ url, request, locals }, next) => {
+export const onRequest = defineMiddleware(({ url, request, locals, redirect }, next) => {
 
 const isLoggedIn = !!firebase.auth.currentUser;     // Verificar si el usuario esta logueado
 locals.isLoggedIn = isLoggedIn;                     // Guardar en locals el estado del logueo para ser usado en layouts o navbar
@@ -19,7 +20,13 @@ if(user){                                           // Si el usuario esta loguea
   }
 }
 
+if( !isLoggedIn && privateRoutes.includes(url.pathname) ){        // Si el usuario no esta logueado y quiere entrar a una ruta privada
+  return redirect('/')
+}
 
+if( isLoggedIn && notAuthenticatedRoutes.includes(url.pathname) ){ // Si el usuario esta logueado y quiere entrar a una ruta pública
+  return redirect('/')
+}
 
 return next()
 

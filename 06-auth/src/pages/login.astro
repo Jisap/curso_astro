@@ -129,9 +129,9 @@ const rememberMe = !!email;
     const provider = new GoogleAuthProvider();
 
     try {
-      const credentials = await signInWithPopup(firebase.auth, provider); // 1º Obtener las credenciales del lado del cliente
+      const credentials = await signInWithPopup(firebase.auth, provider); // 1º Obtener las credenciales de autenticación del lado del cliente utilizando un pop-up de Google
 
-      const { error } = await actions.loginWithGoogle(credentials);       // 2º Enviar las credenciales al servidor para ser verificadas por el backend
+      const { error } = await actions.loginWithGoogle(credentials);       // 2º Enviar las credenciales de autenticación al servidor para ser verificadas por el backend
 
       if (error) {
         alert(error.message);
