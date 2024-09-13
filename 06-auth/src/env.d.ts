@@ -1,6 +1,7 @@
 /// <reference path="../.astro/types.d.ts" />
 
 
+
 interface User {
   email: string;
   name: string;
