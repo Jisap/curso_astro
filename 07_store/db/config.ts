@@ -8,9 +8,17 @@ const User = defineTable({
     email: column.text({ unique: true }),
     password: column.text(),
     createdAt: column.date({ default: new Date() }),
-    role: column.text(),
+    role: column.text({ references: () => Role.columns.id }),
   }
 })
+
+const Role = defineTable({
+  columns: {
+    id: column.text({ primaryKey: true }),
+    name: column.text(),
+  }
+})
+
 
 // https://astro.build/db/config
 export default defineDb({
