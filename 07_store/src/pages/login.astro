@@ -102,7 +102,7 @@ import AuthLayout from '@/layouts/AuthLayout.astro';
 
     const formData = new FormData(form);
 
-    const { error } = await actions.loginUser.safe(formData);
+    const { error } = await actions.loginUser(formData);
 
     if (error) {
       Swal.fire({
