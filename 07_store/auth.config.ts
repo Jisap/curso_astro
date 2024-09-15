@@ -12,22 +12,22 @@ export default defineConfig({
       },
       authorize: async({email, password}) => {
 
-        const [user] = await db
+        const [user] = await db                                       // Obtenemos un usuario de la bd según email y contraseña
           .select()
           .from(User)
           .where(eq(User.email, `${email}`));
 
-        if(!user) {
+        if(!user) {                                                   // Si no existe el usuario mensaje de error                         
           throw new Error('No existe el usuario');
         }
 
-        if(!bcrypt.compareSync(password as string, user.password)) {
+        if(!bcrypt.compareSync(password as string, user.password)) {  // Si la contraseña no es correcta mensaje de error
           throw new Error('Contraseña incorrecta');
         }
 
-        const { password: _, ...rest } = user;
+        const { password: _, ...rest } = user;                        // Si la contraseña es correcta devuelve el user sin la contraseña
 
-        return rest
+        return rest                                                   // Al final se devuelve un user y auth crea una session con las cookies
           
         
       }

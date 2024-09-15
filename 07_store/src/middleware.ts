@@ -1,24 +1,26 @@
 import { defineMiddleware } from "astro:middleware";
-
+import { getSession } from 'auth-astro/server';
 
 const notAuthenticatedRoutes = ['/login', '/register'];
 
 export const onRequest = defineMiddleware(
-  async ({ url, locals, redirect }, next) => {
-    const isLoggedIn = false;
+  async ({ url, locals, redirect, request }, next) => {
+    
+    const session = await getSession(request);  // Utilizamos la session de Oauth para manejar el login. La session se guardó en cookies 
+    const isLoggedIn = !!session                // Convertimos a boolean el estado de la session para poder usarlo en las condiciones de acceso a las rutas
+    const user = session?.user;                 // Obtenemos el user de la session
 
-    // TODO:
-    locals.isLoggedIn = isLoggedIn;
-    locals.user = null;
+   
+    locals.isLoggedIn = isLoggedIn;             // Guardamos el estado de la session en locals
+    locals.user = null;                         // Guardamos el user en locals y lo inicializamos a null
 
-    if (locals.user) {
-      // TODO:
-      // locals.user = {
-      //   avatar: user.photoURL ?? '',
-      //   email: user.email!,
-      //   name: user.displayName!,
-      //   emailVerified: user.emailVerified,
-      // };
+    if (user) {                                 // Si el user existe                
+      locals.user = {                           // Actualizamos el user en locals
+        name: user.name!,                       // con el nombre del user y del email obtenidos de la session controlada por Oauth
+        email: user?.email!,
+      };
+
+      //locals.isAdmin = user.role === 'admin';   // Si el user es admin, lo marcamos en locals
     }
 
     // TODO: Eventualmente tenemos que controlar el acceso por roles
