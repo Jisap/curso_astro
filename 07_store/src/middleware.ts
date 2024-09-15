@@ -11,8 +11,11 @@ export const onRequest = defineMiddleware(
     const user = session?.user;                 // Obtenemos el user de la session
 
    
+    // Agregamos a locals los datos necesarios para renderizar la navbar
+
     locals.isLoggedIn = isLoggedIn;             // Guardamos el estado de la session en locals
     locals.user = null;                         // Guardamos el user en locals y lo inicializamos a null
+    locals.isAdmin = false;                     // Guardamos el rol del user en locals y lo inicializamos a false
 
     if (user) {                                 // Si el user existe                
       locals.user = {                           // Actualizamos el user en locals
@@ -20,7 +23,7 @@ export const onRequest = defineMiddleware(
         email: user?.email!,
       };
 
-      //locals.isAdmin = user.role === 'admin';   // Si el user es admin, lo marcamos en locals
+      locals.isAdmin = user.role === 'admin';   // Si el user es admin, lo marcamos en locals
     }
 
     // TODO: Eventualmente tenemos que controlar el acceso por roles

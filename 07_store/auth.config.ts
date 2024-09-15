@@ -1,3 +1,4 @@
+import type { AdapterUser } from '@auth/core/adapters';
 import Credentials from '@auth/core/providers/credentials';
 import { db, eq, User } from 'astro:db';
 import { defineConfig } from 'auth-astro';
@@ -27,10 +28,27 @@ export default defineConfig({
 
         const { password: _, ...rest } = user;                        // Si la contraseña es correcta devuelve el user sin la contraseña
 
-        return rest                                                   // Al final se devuelve un user y auth crea una session con las cookies
-          
-        
+        return rest                                                   
+           
       }
     })
   ],
+
+  callbacks: {
+    jwt: ({ token, user }) => {                                        // Si se obtuvo un usuario sin pass se devuelve un token que lo contenga -> se guarda en cookies -> se usará con la session de Oauth
+      
+      if (user) {                                                      // Añadimos el user de la bd según email y contraseña al token
+        token.user = user;
+      }
+      
+      return token;                                                    // Devolvemos el token  
+    },
+
+    session: ({ session, token }) => {                                 // Si se obtuvo un token se devuelve una session que lo contenga 
+
+      session.user = token.user as AdapterUser                         // Añadimos el user del token a la session
+
+      return session;
+    }
+  }
 });
