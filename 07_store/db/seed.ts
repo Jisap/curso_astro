@@ -27,15 +27,15 @@ export default async function seed() {
 		role: 'user',
 	};
 
-	await db.insert(Role).values(roles);
-	await db.insert(User).values([johnDoe, janeDoe]);
+	await db.insert(Role).values(roles);															// Inserta los roles en la tabla de Role
+	await db.insert(User).values([johnDoe, janeDoe]);									// Inserta los usuarios en la tabla de User
 
 
 	const queries: any = []
 
-	seedProducts.forEach((p) => {
+	seedProducts.forEach((p) => {                      // Para cada producto del seedProducts
 
-		const product ={
+		const product ={															   // Creamos un objeto producto
 			id: UUID(),
 			stock: p.stock,
 			slug: p.slug,
@@ -49,9 +49,9 @@ export default async function seed() {
 			user: johnDoe.id,
 		};
 
-		queries.push(db.insert(Product).values(product));
+		queries.push(db.insert(Product).values(product));	// E insertamos cada producto en la tabla de Product
 
-		p.images.forEach((img) => {
+		p.images.forEach((img) => { 									    // Para cada imagen del producto	
 
 			const image = {
 				id: UUID(),
@@ -59,10 +59,10 @@ export default async function seed() {
 				productId: product.id,
 			};
 			
-			queries.push(db.insert(ProductImage).values(image));
+			queries.push(db.insert(ProductImage).values(image)); // insertamos cada imagen en la tabla de ProductImage
 		})
 	})
 
-	await db.batch(queries);
+	await db.batch(queries); 																 // Al final se ejecutan todos los queries
 }
 
