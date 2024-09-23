@@ -1,0 +1,36 @@
+---
+interface Props {
+  totalPages: number;
+}
+
+const { totalPages } = Astro.props;
+
+const url = Astro.url;
+const pageParam = Number(url.searchParams.get("page")) ?? 1;
+
+const currentPage = Math.max(
+  // Calculamos el número de página actual como el valor máximo entre,
+  pageParam > totalPages ? totalPages : pageParam, // (Si el número de página actual es mayor que el número total de páginas, devolvemos el número total de páginas)
+  1 // y uno
+);
+
+const path = url.pathname; // Obtenemos la ruta actual
+---
+
+<div class="flex justify-between my-32">
+  <a
+    href={`${path}?page=${Math.max(currentPage - 1, 1)}`}
+    class="p-2 bg-blue-500 text-white rounded-md"
+  >
+    anteriores
+  </a>
+
+  <span>Página {pageParam} de {totalPages}</span>
+
+  <a
+    href={`${path}?page=${Math.min(currentPage + 1, totalPages)}`}
+    class="p-2 bg-blue-500 text-white rounded-md"
+  >
+    Siguientes
+  </a>
+</div>
