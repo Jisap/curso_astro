@@ -4,10 +4,10 @@ import Pagination from "@/components/shared/pagination.astro";
 import MainLayout from "@/layouts/MainLayout.astro";
 import { actions } from "astro:actions";
 
-const searchParams = Astro.url.searchParams;
-const pageParam = Number(searchParams.get("page") ?? 1);
+const searchParams = Astro.url.searchParams;                 // Obtenemos los parámetros de la URL
+const pageParam = Number(searchParams.get("page") ?? 1);     // Obtenemos el parámetro page del URL
 
-const { data, error } = await actions.getProductsByPage({ page: pageParam });
+const { data, error } = await actions.getProductsByPage({ page: pageParam }); // Llamamos a la acción getProductsByPage con el parámetro page
 
 if (error) {
   return Astro.redirect("/");
@@ -17,7 +17,7 @@ const { products, totalPages } = data;
 ---
 
 <MainLayout>
-  <h1 class="text-3xl">Listado de productos</h1>
+  <h1 class="text-3xl pt-[110px] mb-10">Listado de productos <span class="text-xs text-slate-400"> Página {pageParam}</span></h1>
   <ProductList products={products} client:load />
   <Pagination totalPages={totalPages} />
 </MainLayout>
