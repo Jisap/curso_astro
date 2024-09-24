@@ -17,7 +17,7 @@ const { products, totalPages } = data;
 ---
 
 <MainLayout>
-  <h1 class="text-3xl pt-[110px] mb-10">Listado de productos <span class="text-xs text-slate-400"> Página {pageParam}</span></h1>
+  <h1 class="text-3xl mb-10">Listado de productos <span class="text-xs text-slate-400"> Página {pageParam}</span></h1>
   <ProductList products={products} client:load />
   <Pagination totalPages={totalPages} />
 </MainLayout>
