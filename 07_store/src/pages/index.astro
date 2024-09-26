@@ -7,7 +7,7 @@ import { actions } from "astro:actions";
 const searchParams = Astro.url.searchParams;                 // Obtenemos los parámetros de la URL
 const pageParam = Number(searchParams.get("page") ?? 1);     // Obtenemos el parámetro page del URL
 
-const { data, error } = await actions.getProductsByPage({ page: pageParam }); // Llamamos a la acción getProductsByPage con el parámetro page
+const { data, error } = await actions.getProductsByPage({ page: pageParam }); // Llamamos a la acción getProductsByPage con el parámetro page (1ª vez es 1)
 
 if (error) {
   return Astro.redirect("/");
