@@ -1,8 +1,10 @@
 ---
+import { CartCounter } from "../cart/CartCounter";
+
 const { isLoggedIn, isAdmin } = Astro.locals;
 ---
 
-<!-- component -->background-color: #f9f9f9;
+<!-- component -->
 <nav
   class="flex justify-between px-20 py-10 items-center fixed top-0 w-full z-20 h-20 bg-[#f9f9f9]"
 >
@@ -11,6 +13,9 @@ const { isLoggedIn, isAdmin } = Astro.locals;
   </h1>
   <div class="flex items-center">
     <ul class="flex items-center space-x-6">
+
+      <CartCounter />
+
       <li class="font-semibold text-gray-700">
         <a href="/">Home</a>
       </li>
