@@ -58,6 +58,8 @@ const { product, images } = data;
 </MainLayout>
 
 <script>
+import { CartCookiesClient } from "@/utils";
+
   // Sizes
   const sizeElements = document.querySelectorAll('li');                     // Seleccionamos todos los elementos con el selector li
   sizeElements.forEach(liElement => {                                       // Para cada elemento con el selector li
@@ -91,12 +93,21 @@ const { product, images } = data;
     }
 
     addToCardButton.disabled=true;
-
+    
     console.log({                                                  // Mostramos en la consola el objeto que se enviará al servidor
       id: productIdInput.value,
       size: size,
       quantity: quantity
     });
+
+    CartCookiesClient.addItem({                                    // Grabamos en la cookie el producto que se ha añadido al carrito
+      productId: productIdInput.value, 
+      size: size, 
+      quantity: quantity 
+    });
+
+    window.location.href= '/cart';
+
   })                                  
 
 </script>
