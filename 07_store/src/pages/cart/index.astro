@@ -1,11 +1,14 @@
 ---
 import MainLayout from "@/layouts/MainLayout.astro";
+import { actions } from "astro:actions";
 
-const cart = Astro.cookies.get('cart');
+const cookies = Astro.cookies.get("cart")?.value ?? "[]"; // Obtenemos el valor del cookie cart
+
+const { data: products, error } = await actions.loadProductsFromCart({ cookies });  // Llamamos al action loadProductsFromCart con el valor del cookie cart
+
+console.log(products);
 ---
 
 <MainLayout title="Carrito de compras">
   <h1>Carrito</h1>
-
-  <pre>{JSON.stringify(cart, null, 2)}</pre>
 </MainLayout>
