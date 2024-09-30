@@ -23,6 +23,7 @@ const { product, images } = data;
   <!-- <h1>{product.title}</h1> -->
 
   <div class="grid grid-cols-1 md:grid-cols-3 w-full gap-6 lg:gap-10">
+    <!-- El slide ocupa dos cols -->
     <ProductSlideshow images={images} />
 
     <section class="mr-10">
@@ -46,8 +47,8 @@ const { product, images } = data;
       </div>
 
       <button class="mt-5 bg-blue-500 text-white p-3 w-full disabled:bg-gray-500"
-        >Añadir al carrito</button
-      >
+        >Añadir al carrito
+      </button>
 
       <h3 class="mt-10">Descripción</h3>
       <p>{product.description}</p>
@@ -76,6 +77,7 @@ import { CartCookiesClient } from "@/utils";
   let quantity = 1;
 
   const [decrementButton, incrementButton, addToCardButton] = document.querySelectorAll('button');  // Seleccionamos todos los botones que tengan el selector button
+  
   incrementButton.addEventListener('click', () => {                                  // Añadimos un event listener para cuando se haga click en el botón +
     quantity = Math.min(quantity + 1, 5);                                            // Incrementamos el valor de la variable quantity (solo se puede incrementar hasta 5)
     quantityInput.value = quantity.toString()                                        // Actualizamos el valor del input con el nuevo valor de la variable quantity

@@ -40,7 +40,13 @@ const total = products.reduce((acc, product) => acc + product.price * product.qu
                 Talla: <span class="font-bold">{product.size}</span>
               </p>
               <p>x {product.quantity}</p>
-              <button class="btn-delete text-blue-500">Remover</button>
+              <button
+                data-id={product.productId}
+                data-size={product.size}
+                class="btn-delete text-blue-500"
+              >
+                Remover
+              </button>
             </div>
           </div>
         ))
@@ -76,5 +82,22 @@ const total = products.reduce((acc, product) => acc + product.price * product.qu
         PAGAR
       </button>
     </div>
-  </section></MainLayout
->
+  </section></MainLayout>
+
+  <script>
+import { CartCookiesClient } from "@/utils";
+
+    const deleteButtons: NodeListOf<HTMLButtonElement> = document.querySelectorAll(".btn-delete"); // Seleccionamos todos los botones con el selector btn-delete
+    
+    deleteButtons.forEach((button) => {                                       // Para cada botón con el selector btn-delete
+      button.addEventListener("click", (event) => {                           // Añadimos un event listener para cuando se haga click en el botón
+        const target = event.target as HTMLButtonElement;                     // Obtenemos el elemento en el que se haga click
+        const productId = target.dataset.id ?? "";                            // y de ese elemento el id del producto
+        const size = target.dataset.size ?? "";                               // y la talla del producto
+      
+        CartCookiesClient.removeItem(productId, size);                        // Eliminamos el producto de las cookies
+      
+        window.location.reload()
+      });
+    });
+  </script>

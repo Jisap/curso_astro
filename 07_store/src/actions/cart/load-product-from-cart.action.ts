@@ -11,9 +11,9 @@ export const loadProductsFromCart = defineAction({
   input: z.object({
     cookies: z.string()
   }),
-  handler: async ( { cookies } ) => {
+  handler: async ( { cookies } ) => { // cookie -> ptos -> ids -> dbProducts+imgs -> cart with DbProducts = products cart -> return data products
     
-    const cart = JSON.parse(cookies) as CartItem[];
+    const cart = JSON.parse(cookies) as CartItem[];       // Array de objetos con los productos del carrito desde las cookies
     if( cart.length === 0 ) {
       return []
     }

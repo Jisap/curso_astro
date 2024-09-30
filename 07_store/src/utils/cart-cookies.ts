@@ -26,13 +26,15 @@ export class CartCookiesClient {
 
     return cart
   }
+
   static removeItem( productId:string, size:string): CartItem[]{
+
     const cart = CartCookiesClient.getCart()
 
     const updatedCart = cart.filter(
-      (item) => !(item.productId !== productId && item.size !== size)  // Filtramos los productos que no sean el producto que se quiere eliminar
+      (item) => !(item.productId === productId && item.size === size)  // Filtramos los productos que coincidan con el producto que se quiere eliminar
     )
-
+console.log(updatedCart);
     Cookies.set('cart', JSON.stringify(updatedCart))                  // Actualizamos el cookie con el nuevo carrito
     
     return updatedCart;
