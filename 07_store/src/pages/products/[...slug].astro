@@ -59,6 +59,7 @@ const { product, images } = data;
 </MainLayout>
 
 <script>
+import { itemsInCart } from "@/store/cart.store";
 import { CartCookiesClient } from "@/utils";
 
   // Sizes
@@ -94,7 +95,7 @@ import { CartCookiesClient } from "@/utils";
       return alert('Selecciona un tamaño de producto')
     }
 
-    addToCardButton.disabled=true;
+    //addToCardButton.disabled=true;
     
     console.log({                                                  // Mostramos en la consola el objeto que se enviará al servidor
       id: productIdInput.value,
@@ -102,13 +103,14 @@ import { CartCookiesClient } from "@/utils";
       quantity: quantity
     });
 
-    CartCookiesClient.addItem({                                    // Grabamos en la cookie el producto que se ha añadido al carrito
+    const cart = CartCookiesClient.addItem({                      // Grabamos en la cookie el producto que se ha añadido al carrito
       productId: productIdInput.value, 
       size: size, 
       quantity: quantity 
     });
 
-    window.location.href= '/cart';
+    itemsInCart.set( cart.length )                                // Actualizamos el valor de itemsInCart en la store
+    //window.location.href= '/cart';
 
   })                                  
 
