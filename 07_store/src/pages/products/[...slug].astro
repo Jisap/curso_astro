@@ -6,19 +6,14 @@ import { actions } from "astro:actions";
 const { slug } = Astro.params;
 
 const { data, error } = await actions.getProductBySlug(slug ?? "");
-if(error){
+if (error) {
   return Astro.redirect("/404");
 }
 
 const { product, images } = data;
-
-
 ---
 
-<MainLayout
-  title={product.title}
-  description={product.description}
-  >
+<MainLayout title={product.title} description={product.description}>
   <!-- image={image} -->
   <!-- <h1>{product.title}</h1> -->
 
@@ -46,7 +41,8 @@ const { product, images } = data;
         <button class="btn-quantity">+</button>
       </div>
 
-      <button class="mt-5 bg-blue-500 text-white p-3 w-full disabled:bg-gray-500"
+      <button
+        class="mt-5 bg-blue-500 text-white p-3 w-full disabled:bg-gray-500"
         >Añadir al carrito
       </button>
 
@@ -59,61 +55,70 @@ const { product, images } = data;
 </MainLayout>
 
 <script>
-import { itemsInCart } from "@/store/cart.store";
-import { CartCookiesClient } from "@/utils";
+  import { itemsInCart } from "@/store/cart.store";
+  import { CartCookiesClient } from "@/utils";
+  import { navigate } from "astro:transitions/client";
 
-  // Sizes
-  const sizeElements = document.querySelectorAll('li');                     // Seleccionamos todos los elementos con el selector li
-  sizeElements.forEach(liElement => {                                       // Para cada elemento con el selector li
-    liElement.addEventListener('click', () => {                             // Añadimos un event listener para cuando se haga click en el elemento
-      sizeElements.forEach(s => s.classList.remove('selected-size'));       // Eliminamos la clase selected-size de todos los elementos
-      liElement.classList.add('selected-size');                             // Añadimos la clase selected-size al elemento que se haga click
-    })
-  });
+  document.addEventListener("astro:page-load", () => {                    // Cuando la página se cargue
+ 
+    // Sizes
+    const sizeElements = document.querySelectorAll("li");                 // Seleccionamos todos los elementos con el selector li
 
-  // Quantity
-  const quantityInput = document.querySelector('input') as HTMLInputElement         // Seleccionamos el primer input que tenga el selector input
-  const productIdInput = document.querySelector('#product-id') as HTMLInputElement  // Seleccionamos el input con el selector #product-id -> id del producto
-  
-  let quantity = 1;
+    sizeElements.forEach((liElement) => {                                 // Para cada elemento con el selector li
+      liElement.addEventListener("click", () => {                         // Añadimos un event listener para cuando se haga click en el elemento
+        sizeElements.forEach((s) => s.classList.remove("selected-size")); // Eliminamos la clase selected-size de todos los elementos
+        liElement.classList.add("selected-size");                         // Añadimos la clase selected-size al elemento que se haga click
+      });
+    });
 
-  const [decrementButton, incrementButton, addToCardButton] = document.querySelectorAll('button');  // Seleccionamos todos los botones que tengan el selector button
-  
-  incrementButton.addEventListener('click', () => {                                  // Añadimos un event listener para cuando se haga click en el botón +
-    quantity = Math.min(quantity + 1, 5);                                            // Incrementamos el valor de la variable quantity (solo se puede incrementar hasta 5)
-    quantityInput.value = quantity.toString()                                        // Actualizamos el valor del input con el nuevo valor de la variable quantity
-  })
-  decrementButton.addEventListener('click', () => {                                  // Añadimos un event listener para cuando se haga click en el botón -
-    quantity = Math.max(quantity - 1, 1);                                            // Decrementamos el valor de la variable quantity (solo se puede decrementar hasta 1)
-    quantityInput.value = quantity.toString()                                        // Actualizamos el valor del input con el nuevo valor de la variable quantity
-  })
+    // Quantity
+    const quantityInput = document.querySelector("input") as HTMLInputElement; // Seleccionamos el primer input que tenga el selector input
+    const productIdInput = document.querySelector(
+      "#product-id"
+    ) as HTMLInputElement;                                                     // Seleccionamos el input con el selector #product-id -> id del producto
 
-  // Add to card -> 
-  addToCardButton.addEventListener('click', () => {
-    const size = document.querySelector('.selected-size')?.textContent            // Seleccionamos el elemento con la clase selected-size, elemento cuya talla se ha seleccionado
-    if(!size){
-      return alert('Selecciona un tamaño de producto')
-    }
-
-    //addToCardButton.disabled=true;
+    let quantity = 1;
     
-    console.log({                                                  // Mostramos en la consola el objeto que se enviará al servidor
-      id: productIdInput.value,
-      size: size,
-      quantity: quantity
+    const [decrementButton, incrementButton, addToCardButton] =
+    document.querySelectorAll("button");                                     // Seleccionamos todos los botones que tengan el selector button
+    
+    if(!incrementButton || !quantityInput ) return;
+
+    incrementButton.addEventListener("click", () => {                          // Añadimos un event listener para cuando se haga click en el botón +
+      quantity = Math.min(quantity + 1, 5);                                    // Incrementamos el valor de la variable quantity (solo se puede incrementar hasta 5)
+      quantityInput.value = quantity.toString();                               // Actualizamos el valor del input con el nuevo valor de la variable quantity
+    });
+    decrementButton.addEventListener("click", () => {                          // Añadimos un event listener para cuando se haga click en el botón -
+      quantity = Math.max(quantity - 1, 1);                                    // Decrementamos el valor de la variable quantity (solo se puede decrementar hasta 1)
+      quantityInput.value = quantity.toString();                               // Actualizamos el valor del input con el nuevo valor de la variable quantity
     });
 
-    const cart = CartCookiesClient.addItem({                      // Grabamos en la cookie el producto que se ha añadido al carrito
-      productId: productIdInput.value, 
-      size: size, 
-      quantity: quantity 
+    // Add to card ->
+    addToCardButton.addEventListener("click", async() => {
+      const size = document.querySelector(".selected-size")?.textContent;      // Seleccionamos el elemento con la clase selected-size, elemento cuya talla se ha seleccionado
+      if (!size) {
+        return alert("Selecciona un tamaño de producto");
+      }
+
+      addToCardButton.disabled=true;
+
+      console.log({                                                            // Mostramos en la consola el objeto que se enviará al servidor
+        id: productIdInput.value,
+        size: size,
+        quantity: quantity,
+      });
+
+      const cart = CartCookiesClient.addItem({                                // Grabamos en la cookie el producto que se ha añadido al carrito
+        productId: productIdInput.value,
+        size: size,
+        quantity: quantity,
+      });
+
+      itemsInCart.set(cart.length);                                           // Actualizamos el valor de itemsInCart en la store
+      //window.location.href= '/cart';
+      await navigate('/cart');
     });
-
-    itemsInCart.set( cart.length )                                // Actualizamos el valor de itemsInCart en la store
-    //window.location.href= '/cart';
-
-  })                                  
-
+  });
 </script>
 
 <style>
