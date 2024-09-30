@@ -5,11 +5,11 @@ import { useEffect } from "react";
 
 export const CartCounter = () => {
 
-  const $itemsInCart = useStore(itemsInCart);
+  const $itemsInCart = useStore(itemsInCart); // Obtenemos el estado de la cantidad de productos en el carrito
 
   useEffect(() => {
-    const cart = CartCookiesClient.getCart()
-    itemsInCart.set( cart.length )
+    const cart = CartCookiesClient.getCart(); // Obtenemos el carrito del cliente
+    itemsInCart.set( cart.length );           // Actualizamos el estado de itemsInCart basado en el carrito del cliente
   },[])
 
   return (
