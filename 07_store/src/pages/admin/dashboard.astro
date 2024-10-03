@@ -1,0 +1,68 @@
+---
+import MainLayout from "@/layouts/MainLayout.astro";
+import Pagination from "@/components/shared/pagination.astro";
+import { actions } from "astro:actions";
+import { Formatter } from "@/utils/formatter";
+import ProductImage  from "@/components/products/ProductImage.astro";
+
+
+const searchParams = Astro.url.searchParams; // Obtenemos los parámetros de la URL
+const pageParam = Number(searchParams.get("page") ?? 1); // Obtenemos el parámetro page del URL
+
+const { data, error } = await actions.getProductsByPage({ page: pageParam }); // Llamamos a la acción getProductsByPage con el parámetro page (1ª vez es 1)
+
+if (error) {
+  return Astro.redirect("/");
+}
+
+const { products, totalPages } = data;
+---
+
+<MainLayout title="Panel Administrativo">
+  <h1>Dashboard</h1>
+  <p>Listado de productos</p>
+
+  <div class="overflow-x-auto py-10">
+    <table class="min-w-full rounded-md shadow-lg">
+      <thead>
+        <tr>
+          <th class="py-2 px-4 border-b text-sm font-medium text-gray-600 text-left">Imagen</th>
+          <th class="py-2 px-4 border-b text-sm font-medium text-gray-600 text-left">Título</th>
+          <th class="py-2 px-4 border-b text-sm font-medium text-gray-600 text-left">Precio</th>
+          <th class="py-2 px-4 border-b text-sm font-medium text-gray-600 text-left">Inventario</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {
+          products.map((product) => (
+            <tr class="hover:bg-gray-50">
+              <td class="py-2 px-4 border-b">
+                <ProductImage 
+                  src={ product.images.split(',')[0] }
+                  alt={product.title}
+                  className="w-20 h-20"
+                />
+              </td>
+              <td class="py-2 px-4 border-b">
+                <a
+                  data-astro-prefetch="load"
+                  class="text-blue-600 hover:underline cursor-pointer"
+                  href={`/admin/products/${product.slug}`}
+                >
+                  {product.title}
+                </a>
+              </td>
+              <td class="py-2 px-4 border-b">
+                {Formatter.currency(product.price)}
+              </td>
+              <td class="py-2 px-4 border-b">{product.stock}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <Pagination totalPages={totalPages} />
+</MainLayout>
