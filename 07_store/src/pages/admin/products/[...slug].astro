@@ -20,6 +20,14 @@ import { actions } from "astro:actions";
   <a href="javascript:history.back()" class="text-blue-500">← Volver</a>
 
   <form class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+    <!-- Si es una actualización asignamos el id existente -->
+    <input  
+      type="hidden"
+      name="id"
+      value={product.id} 
+    />
+
     <!-- Datos generales -->
     <div class="mt-2">
       <h2 class="text-lg font-semibold">Datos generales</h2>
@@ -264,6 +272,9 @@ import { actions } from "astro:actions";
 </MainLayout>
 
 <script>
+import { actions } from "astro:actions";
+import { navigate } from "astro:transitions/client";
+
 
   document.addEventListener('astro:page-load', () => {
     const form = document.querySelector('form') as HTMLFormElement; // Identificamos el formulario
@@ -272,7 +283,7 @@ import { actions } from "astro:actions";
     const sizeButtons = document.querySelectorAll('.btn-size');     // Identificamos los botones de tamaño
 
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async(e) => {
       e.preventDefault();
 
       const selectedSizes = Array.from(sizeButtons)                 // Obtenemos los botones de tamaño seleccionados
@@ -282,8 +293,13 @@ import { actions } from "astro:actions";
 
       const formData = new FormData(form);                          // Creamos un objeto FormData con los datos del formulario
       formData.set('sizes', selectedSizes);                         // Añadimos a formData los sizes seleccionados
-      const formValues = Object.fromEntries(formData.entries());    // Obtenemos los valores del formulario como un objeto
-      console.log(formValues);
+
+      const { data, error } = await actions.createUpdateProduct(formData); // Llamamos a la acción createUpdateProduct con el objeto FormData
+      if(error) {
+        return alert(error.message);
+      }
+
+      navigate(`/admin/products/${data.product.slug}`);
     })
   })
 
