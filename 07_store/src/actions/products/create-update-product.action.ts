@@ -26,7 +26,7 @@ export const createUpdateProduct = defineAction({
     const session = await getSession(request);
     const user = session?.user;
 
-    if(!user) {
+    if(!user || !user.id) {
       throw new Error('Unauthorized');
     }
 
@@ -38,8 +38,14 @@ export const createUpdateProduct = defineAction({
       user: user.id,
       ...rest
     }
-console.log(product);
-    await db.update(Product).set(product).where(eq(Product.id, id));          // Actualizamos el producto en bd
+
+    if(!form.id){                                                            // Si el formulario no tiene id, es un nuevo producto
+      await db.insert(Product).values(product);                              // Insertamos el producto en bd para su creación
+    }else{
+      await db.update(Product).set(product).where(eq(Product.id, id));       // Sino Actualizamos el producto en bd
+    }
+
+   
 
     return { product }
   }

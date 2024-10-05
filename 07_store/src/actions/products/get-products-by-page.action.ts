@@ -44,23 +44,17 @@ export const getProductsByPage = defineAction({
       from ${Product} a
       LIMIT ${ limit } OFFSET ${(page - 1) * limit};
     `
-    const { rows } = await db.run(productsQuery);
-   
+    const { rows } = await db.run(productsQuery);                         // Ejecutamos la sentencia SQL y obtenemos los registros
 
-    // const products = await db                       // Si la página solicitada es menor o igual que el número total de páginas obtenemos
-    //   .select()                                     // Seleccionamos todos los registros
-    //   .from(Product)                                // De la tabla Product
-    //   .innerJoin(                                   // Unimos 
-    //     ProductImage,                               // La tabla ProductImage con la tabla Product
-    //     eq(                                         // con la condición de igualdad
-    //       Product.id,                               // de que los ids del producto con el de la imagen coincidan
-    //       ProductImage.productId
-    //     ))                                           
-    //   .limit(limit)                                 // Limitamos los registros a 10
-    //   .offset((page - 1) * 12);                     // Desplazamos los registros 12 registros por página
+    const products = rows.map((product) => {                              // Iteramos sobre los registros
+      return {                                                            // Creamos un objeto ProductWithImages 
+        ...product,
+        images: product.images ? product.images : "no-image.png"          // Si las imágenes son vacías, devolvemos un valor por defecto
+      }
+    }) as unknown as ProductWithImages[];
 
     return {
-      products: rows as unknown as ProductWithImages[],// Devuelve los registros
+      products: products,                              // Devuelve los registros
       totalPages: totalPages,                          // Devuelve el número total de páginas
     }
   }
