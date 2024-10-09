@@ -1,8 +1,9 @@
 
+
 import { ImageUpload } from "@/utils/image-upload";
 import { z } from "astro/zod";
 import { defineAction } from "astro:actions";
-import { db, eq, Product } from "astro:db";
+import { db, eq, Product, ProductImage } from "astro:db";
 import { getSession } from "auth-astro/server";
 import { v4 as UUID } from 'uuid';
 
@@ -48,18 +49,49 @@ export const createUpdateProduct = defineAction({
       ...rest
     }
 
+    const queries: any = []
+
     if(!form.id){                                                            // Si el formulario no tiene id, es un nuevo producto
-      await db.insert(Product).values(product);                              // Insertamos el producto en bd para su creación
+      queries.push(
+        db.insert(Product).values(product)                                   // Insertamos el producto en queries para su posterior creación
+      )
     }else{
-      await db.update(Product).set(product).where(eq(Product.id, id));       // Sino Actualizamos el producto en bd
+      queries.push(
+        db.update(Product).set(product).where(eq(Product.id, id))            // Sino Actualizamos el producto en queries para su posterior creación
+      )
     }
 
-    console.log(imageFiles);
+    const secureUrls:string[] = []
 
-    imageFiles?.forEach( async(imageFile) => {
-      if(imageFile.size <= 0) return;
-      await ImageUpload.upload(imageFile);
+    if(
+      form.imageFiles &&                                                     // Si el formulario tiene imagenes
+      form.imageFiles.length > 0 &&
+      form.imageFiles[0].size > 0
+    ){ 
+
+      const urls = await Promise.all(                                        // Almacenamos las URLs de las imagenes subidas
+        form.imageFiles.map((file) => ImageUpload.upload(file)) 
+      );
+
+      secureUrls.push(...urls)                                               // Y las añadimos a la lista de URLs seguras
+    }                       
+
+    // imageFiles?.forEach( async(imageFile) => {
+    //   if(imageFile.size <= 0) return;
+    //   const url =await ImageUpload.upload(imageFile);                     // Al subir a Cloudinary, se devuelve la URL de la imagen subida
+    // });
+
+    secureUrls.forEach((imageUrl) => {                                       // Recorremos las urls de las imagenes a subir -> creamos el objeto de cada imagen -> ProductImage
+      const imageObj = {
+        id: UUID(),
+        image: imageUrl,
+        productId: product.id
+      }
+
+      queries.push( db.insert(ProductImage).values(imageObj))                // Insertamos las imagenes en queries para su posterior creación
     })
+
+    await db.batch(queries);                                                  // Ejecutamos las consultas
 
    
     return { product }

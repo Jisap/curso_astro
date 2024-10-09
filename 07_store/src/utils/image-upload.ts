@@ -22,6 +22,6 @@ export class ImageUpload {
 
     console.log(resp);
 
-    return 'http://misitio.web/abc.png';
+    return resp.secure_url;                                     // Devolvemos la URL de la imagen subida
   }
 }
