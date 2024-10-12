@@ -23,7 +23,7 @@ export const deleteProductImage = defineAction({
       .where(eq(ProductImage.id, imageId))
 
     if(!productImage){
-      throw new Error(`iamge ${imageId} not found`)
+      throw new Error(`image ${imageId} not found`)
     }
 
     const deleted = await db                                                         // Eliminamos el productImage de la base de datos

@@ -241,7 +241,7 @@ const { product, images } = data; // las images es un array de objetos con la im
                     />
                   </td>
                   <td class="text-center">
-                    <button class="btn-delete-image" data-id={id}>
+                    <button type="button" class="btn-delete-image" data-id={id}>
                       X
                     </button>
                   </td>
@@ -296,23 +296,34 @@ const { product, images } = data; // las images es un array de objetos con la im
     });
 
     // Delete image
-    const btnsdeleteImage = document.querySelectorAll(".btn-delete-image");   // Seleccionamos todos los botones con el selector btn-delete-image
+    const btnsdeleteImage = document.querySelectorAll(".btn-delete-image"); // Seleccionamos todos los botones con el selector btn-delete-image
 
-    btnsdeleteImage.forEach((btn) => {                                        // Para cada botón con el selector btn-delete-image
-      btn.addEventListener("click", async (e) => {                            // Añadimos un event listener para cuando se haga click en el botón
-        const id = btn.getAttribute("data-id") ?? "";                         // Obtenemos el id del botón
+    btnsdeleteImage.forEach((btn) => {
+      // Para cada botón con el selector btn-delete-image
+      btn.addEventListener("click", async (e) => {
+        // Añadimos un event listener para cuando se haga click en el botón
+        const id = btn.getAttribute("data-id") ?? ""; // Obtenemos el id del botón
 
         if (!id) return;
-        const { error } = await actions.deleteProductImage(id);               // Llamamos a la acción deleteProductImage con el id del botón 
+        const { error } = await actions.deleteProductImage(id); // Llamamos a la acción deleteProductImage con el id del botón
 
         if (error) {
           return alert(error.message);
         }
 
-        document.querySelector(`#${id}`)?.remove();                           // Eliminamos el elemento con el id del botón
+        const trId = `#${id}`;
+        console.log("Selector del tr:", trId);
+
+        const tr = document.querySelector(trId);
+        console.log("Elemento tr encontrado:", tr);
+
+        if (tr) {
+          tr.remove();
+        } else {
+          console.error("No se encontró el elemento tr con el ID:", trId);
+        }
+        
       });
     });
-
-
   });
 </script>
