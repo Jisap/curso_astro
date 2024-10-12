@@ -1,4 +1,5 @@
 
+import { ImageUpload } from "@/utils/image-upload";
 import { z } from "astro/zod";
 import { defineAction } from "astro:actions";
 import { db, eq, ProductImage } from "astro:db";
@@ -16,7 +17,7 @@ export const deleteProductImage = defineAction({
       throw new Error('Unauthorized');
     }
 
-    const [ productImage ] = await db
+    const [ productImage ] = await db                                                // Obtenemos el productImage de la base de datos
       .select()
       .from(ProductImage)
       .where(eq(ProductImage.id, imageId))
@@ -25,10 +26,14 @@ export const deleteProductImage = defineAction({
       throw new Error(`iamge ${imageId} not found`)
     }
 
-    const deleted = await db
+    const deleted = await db                                                         // Eliminamos el productImage de la base de datos
       .delete(ProductImage)
       .where(eq(ProductImage.id, imageId))
       .execute()
+
+    if( productImage.image.includes('http') ){                                       // Si la imagen es una URL, la eliminamos de Cloudinary
+      await ImageUpload.delete(productImage.image)
+    }
 
     return { ok: true }
   }
