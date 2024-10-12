@@ -19,7 +19,7 @@ const { product, images } = data;
 
   <div class="grid grid-cols-1 md:grid-cols-3 w-full gap-6 lg:gap-10">
     <!-- El slide ocupa dos cols -->
-    <ProductSlideshow images={images} />
+    <ProductSlideshow images={images.map((i) => i.image)} />
 
     <section class="mr-10">
       <h2 class="text-2xl font-bold mt-12">{product.title}</h2>
