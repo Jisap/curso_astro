@@ -24,4 +24,24 @@ export class ImageUpload {
 
     return resp.secure_url;                                     // Devolvemos la URL de la imagen subida
   }
+
+  static async delete(image: string) {
+
+    try {
+      const imageName = image.split('/').pop() ?? "";             // Extraemos el último elemento de la cadena, que es el id de la imagen
+    
+      const imageId = imageName.split(".")[0];                    // El id contiene la extensión, por lo que extraemos el id sin la extensión
+    
+      const resp = await cloudinary.uploader.destroy(             // Finalmente, se elimina la imagen de Cloudinary
+        imageId
+      )
+
+      return true;
+
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+
+  }
 }
