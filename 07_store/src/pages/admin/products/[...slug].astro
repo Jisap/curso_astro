@@ -279,7 +279,7 @@ const { product, images } = data; // las images es un array de objetos con la im
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const selectedSizes = Array.from(sizeButtons) // Obtenemos los botones de tamaño seleccionados
+      const selectedSizes = Array.from(sizeButtons) // Obtenemos todos los botones de tamaño
         .filter((button) => button.classList.contains("active")) // Miramos que botones están activos
         .map((button) => button.textContent?.trim()) // Obtenemos el texto del botón
         .join(", "); // Unimos los textos en una sola cadena
@@ -312,18 +312,51 @@ const { product, images } = data; // las images es un array de objetos con la im
         }
 
         const trId = `#${id}`;
-        console.log("Selector del tr:", trId);
-
         const tr = document.querySelector(trId);
-        console.log("Elemento tr encontrado:", tr);
 
         if (tr) {
           tr.remove();
         } else {
           console.error("No se encontró el elemento tr con el ID:", trId);
         }
-        
       });
+    });
+
+    // Drag & Drop
+    const lblSelectedFiles = document.querySelector(
+      "#lbl-selected-files"
+    ) as HTMLParagraphElement;
+    const dropZone = document.querySelector("#drop-zone") as HTMLLabelElement;
+    const fileInput = document.querySelector(
+      "#file-upload"
+    ) as HTMLInputElement;
+
+    const preventDefaults = (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    const highlight = (e: DragEvent) => {
+      dropZone.classList.add("border-blue-500", "bg-blue-50");
+    };
+
+    const unHighlight = (e: DragEvent) => {
+      dropZone.classList.remove("border-blue-500", "bg-blue-50");
+    };
+
+    (["dragenter", "dragover", "dragleave", "drop"] as const).forEach(  // prevenimos comportamientos por defecto del explorador en la zona de drag
+      (eventName) => {
+        dropZone.addEventListener(eventName, preventDefaults);
+        document.body.addEventListener(eventName, preventDefaults);
+      }
+    );
+
+    (["dragenter", "dragover"] as const).forEach((eventName) => {   // Iluminamos de azul el dropZone cuando se arrastra un archivo
+      dropZone.addEventListener(eventName, highlight);
+    });
+
+    (["dragleave", "drop"] as const).forEach((eventName) => { // Eliminamos el resaltado de color cuando se deja el dropZone
+      dropZone.addEventListener(eventName, unHighlight);
     });
   });
 </script>
