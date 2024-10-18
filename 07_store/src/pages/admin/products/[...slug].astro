@@ -326,7 +326,10 @@ const { product, images } = data; // las images es un array de objetos con la im
     const lblSelectedFiles = document.querySelector(
       "#lbl-selected-files"
     ) as HTMLParagraphElement;
-    const dropZone = document.querySelector("#drop-zone") as HTMLLabelElement;
+
+    const dropZone = document.querySelector(
+      "#drop-zone") as HTMLLabelElement;
+
     const fileInput = document.querySelector(
       "#file-upload"
     ) as HTMLInputElement;
@@ -344,6 +347,26 @@ const { product, images } = data; // las images es un array de objetos con la im
       dropZone.classList.remove("border-blue-500", "bg-blue-50");
     };
 
+    const createFileList = (file: File[]): FileList => {  // Se recibe el array de files
+      const dataTransfer = new DataTransfer();            // Se crea una instancia de DataTransfer que encapsula los archivos mientras se arrastran
+      file.forEach((file) => {                            // Se itera sobre cada archivo
+        dataTransfer.items.add(file);                     // Se agrega cada archivo al DataTransfer
+      });
+      return dataTransfer.files;                          // Se devuelve el archivo listado en el DataTransfer
+    }
+
+    const handleFiles = (files:FileList) => {                         // Función para el manejo de los archivos 
+      const validFiles = Array.from(files).filter(
+        file => file.type.startsWith("image/")                        // Filtramos los archivos que sean de tipo imagen
+      )
+      
+      if(fileInput && validFiles.length > 0){                         // Si hay archivos validos y el input de archivo está visible
+        fileInput.files = createFileList(validFiles)                  // Se actualiza el value delinput de archivo con los archivos validos
+      }
+
+      lblSelectedFiles.innerHTML = `<strong>${validFiles.length}</strong> archivos seleccionados`;
+    }
+
     (["dragenter", "dragover", "dragleave", "drop"] as const).forEach(  // prevenimos comportamientos por defecto del explorador en la zona de drag
       (eventName) => {
         dropZone.addEventListener(eventName, preventDefaults);
@@ -358,5 +381,14 @@ const { product, images } = data; // las images es un array de objetos con la im
     (["dragleave", "drop"] as const).forEach((eventName) => { // Eliminamos el resaltado de color cuando se deja el dropZone
       dropZone.addEventListener(eventName, unHighlight);
     });
+
+
+    dropZone.addEventListener("drop", async (e) => {
+      const files = e.dataTransfer?.files;
+      console.log('files',files)
+      if(files){
+        handleFiles(files)
+      }
+    })
   });
 </script>
